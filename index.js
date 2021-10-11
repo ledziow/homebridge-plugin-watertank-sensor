@@ -72,6 +72,7 @@ WaterTankSensor.prototype = {
             // Make request only every ten minutes
             if (this.lastupdate === 0 || this.lastupdate + 600 < (new Date().getTime() / 1000) || this.cache === undefined) {
 
+                console.log('APIURL: %s',thi.api_url)
                 request({
                     url: this.api_url,
                     json: true,
@@ -87,9 +88,10 @@ WaterTankSensor.prototype = {
 
                         data.locations.forEach(function(location) {
                             var device_id = location.id;
+                            console.log(location);
                             console.log(device_id);
                 
-                            if (device_id === this.device_id) {
+                            if (device_id === self.device_id) {
                                 this.log.info("Found device: %s.", device_id.toString());
 
                                 temp_data = {
@@ -122,6 +124,7 @@ WaterTankSensor.prototype = {
                 // Return cached data
             } else {
                 self.log.info("Pulling data from cache.");
+                console.log("Pulling data from cache.");
                 callback(null, self.cache, 'Cache');
             }
         }
@@ -133,6 +136,7 @@ WaterTankSensor.prototype = {
 
     _shouldUpdate: function () {
         this.log.info("Checking cacheExpiryTime.");
+        console.log("Checking cacheExpiryTime.");
         let intervalBetweenUpdates = this.cacheExpiryTime * 60
         return this.lastupdate === 0 ||
                 this.lastupdate + intervalBetweenUpdates < (new Date().getTime() / 1000) ||
