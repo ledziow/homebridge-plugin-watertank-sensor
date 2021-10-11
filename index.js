@@ -72,7 +72,7 @@ WaterTankSensor.prototype = {
             // Make request only every ten minutes
             if (this.lastupdate === 0 || this.lastupdate + 600 < (new Date().getTime() / 1000) || this.cache === undefined) {
 
-                console.log('APIURL: %s',this.api_url)
+                self.log.info('Requesting APIURL: %s',this.api_url)
                 request({
                     url: this.api_url,
                     json: true,
@@ -88,22 +88,18 @@ WaterTankSensor.prototype = {
 
                         data.locations.forEach(function(location) {
                             var device_id = location.id;
-                            console.log(location);
-                            console.log(device_id);
                 
                             if (device_id === self.device_id) {
                                 self.log.info("Found device: %s.", device_id.toString());
 
-                                temp_data = {
+                                var temp_data = {
                                     'temperature': location.measurement.temperature,
                                     'waterlevel': location.measurement.percent,
                                     'statusbattery': location.measurement.volts
                                 };
                                 
                                 self.active = location.active
-
                                 data = temp_data
-                
                             }
                         })
 
