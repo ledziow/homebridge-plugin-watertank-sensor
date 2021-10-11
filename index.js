@@ -140,7 +140,6 @@ WaterTankSensor.prototype = {
 
     _shouldUpdate: function () {
         this.log.info("Checking cacheExpiryTime.");
-        console.log("Checking cacheExpiryTime.");
         let intervalBetweenUpdates = this.cacheExpiryTime * 60
         return this.lastupdate === 0 ||
                 this.lastupdate + intervalBetweenUpdates < (new Date().getTime() / 1000) ||
@@ -158,7 +157,10 @@ WaterTankSensor.prototype = {
                 return next(error, null);
             }
 
-            self.log.info('Returned data: %s', Object.keys(data));
+            self.log.info('Returned data:');
+            for (var item in data) {
+                self.log.info('key:' + item + ' value:' + data[item]);
+            }
 
             service.setCharacteristic(Characteristic.StatusFault, 0);
 
@@ -168,15 +170,15 @@ WaterTankSensor.prototype = {
             switch (type) {
                 case DATAVAR.BATTERY:
                     typeName = "StatusLowBattery"
-                    value = self._transformPBatteryLevel(data.statusbattery)
+                    value = self._transformPBatteryLevel(data['statusbattery'])
                     break;
                 case DATAVAR.TEMPERATURE:
                     typeName = "Temperature"
-                    value = data.temperature
+                    value = data['temperature']
                     break;
                 case DATAVAR.WATERLEVEL:
                     typeName = "WaterLevel"
-                    value = data.waterlevel
+                    value = data['waterlevel']
                     break;
                 default:
                     let error = new Error("Unknown data type: " + type)
