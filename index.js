@@ -72,7 +72,7 @@ WaterTankSensor.prototype = {
             // Make request only every ten minutes
             if (this.lastupdate === 0 || this.lastupdate + 600 < (new Date().getTime() / 1000) || this.cache === undefined) {
 
-                console.log('APIURL: %s',thi.api_url)
+                console.log('APIURL: %s',this.api_url)
                 request({
                     url: this.api_url,
                     json: true,
