@@ -1,0 +1,31 @@
+{
+  "private": true,
+  "displayName": "Mojdomek - WaterTank Sensor",
+  "name": "homebridge-plugin-watertank-sensor",
+  "version": "0.0.1",
+  "description": "Homebridge-plugin for Mojdomek.eu devices.",
+  "license": "Apache-2.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ledziow/homebridge-plugin-watertank_monitor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ledziow/homebridge-plugin-watertank_monitor/issues"
+  },
+  "engines": {
+    "node": ">=12.13.0",
+    "homebridge": ">=1.3.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "homebridge-plugin",
+    "mojdomek",
+    "watertank"
+  ],
+  "dependencies": {
+    "request": "^2.88.0"
+  }
+}
