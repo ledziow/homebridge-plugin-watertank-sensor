@@ -20,11 +20,8 @@ const DATAVAR = {
     BATTERY: 'batteryType'
 };
 
-
-
-
 function WaterTankSensor(log, config) {
-    logger.handler = log;
+    this.log = log;
 
     this.name = config.name || 'WaterTankSensor';
     this.user_id = config.user_id;
