@@ -153,7 +153,7 @@ WaterTankSensor.prototype = {
         self.getWaterTankData(function (error, data, source) {
             if (error) {
                 service.setCharacteristic(Characteristic.StatusFault, 1);
-                self.log(error.message);
+                self.log.info(error.message);
                 return next(error, null);
             }
 
@@ -166,6 +166,8 @@ WaterTankSensor.prototype = {
 
             let typeName = null
             let value = null
+
+            self.log.info('service: %s, type: %s',service.toString(),type.toString());
 
             switch (type) {
                 case DATAVAR.BATTERY:
@@ -182,7 +184,7 @@ WaterTankSensor.prototype = {
                     break;
                 default:
                     let error = new Error("Unknown data type: " + type)
-                    self.log(error.message);
+                    self.log.info(error.message);
                     return next(error, null);
             }
 
