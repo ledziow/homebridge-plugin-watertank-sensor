@@ -92,7 +92,7 @@ WaterTankSensor.prototype = {
                             console.log(device_id);
                 
                             if (device_id === self.device_id) {
-                                this.log.info("Found device: %s.", device_id.toString());
+                                self.log.info("Found device: %s.", device_id.toString());
 
                                 temp_data = {
                                     'temperature': location.measurement.temperature,
@@ -109,7 +109,7 @@ WaterTankSensor.prototype = {
 
 
                         self.cache = data;
-                        this.log.info("Cached data: %s.", data.toString());
+                        self.log.info("Cached data: %s.", data.toString());
                         self.lastupdate = new Date().getTime() / 1000;
                         callback(null, data, 'Fetch');
 
