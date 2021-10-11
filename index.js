@@ -61,13 +61,6 @@ WaterTankSensor.prototype = {
     getWaterTankData: function (callback) {
         var self = this;
 
-        temp_data = {
-            'temperature': '',
-            'waterlevel': '',
-            'statusbattery': ''
-
-        };
-
         if (self.isFetching) {
             self.callbackQueue.push(callback)
             return
@@ -99,9 +92,12 @@ WaterTankSensor.prototype = {
                             if (device_id === this.device_id) {
                                 this.log.info("Found device: %s.", device_id.toString());
 
-                                temp_data['temperature'] = location.measurement.temperature;
-                                temp_data['waterlevel'] = location.measurement.percent;
-                                temp_data['statusbattery'] = location.measurement.volts;
+                                temp_data = {
+                                    'temperature': location.measurement.temperature,
+                                    'waterlevel': location.measurement.percent,
+                                    'statusbattery': location.measurement.volts
+                                };
+                                
                                 self.active = location.active
 
                                 data = temp_data
