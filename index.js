@@ -162,12 +162,13 @@ WaterTankSensor.prototype = {
                 self.log.info('key:' + item + ' value:' + data[item]);
             }
 
+            self.log.info('service: %s, type: %s',service.toString(),type.toString());
+
             service.setCharacteristic(Characteristic.StatusFault, 0);
 
             let typeName = null
             let value = null
 
-            self.log.info('service: %s, type: %s',service.toString(),type.toString());
 
             switch (type) {
                 case DATAVAR.BATTERY:
