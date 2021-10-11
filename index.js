@@ -10,7 +10,7 @@ var request = require('request');
 module.exports = function (homebridge) {
     Service = homebridge.hap.Service;
     Characteristic = homebridge.hap.Characteristic;
-    homebridge.registerAccessory("homebridge-plugin-watertank-sensor", "Mojdomek.eu - WaterTankSensor", WaterTankSensor);
+    homebridge.registerAccessory("homebridge-plugin-watertank-sensor", "WaterTankSensor", WaterTankSensor);
 };
 
 //DataSet
