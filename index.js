@@ -169,7 +169,8 @@ WaterTankSensor.prototype = {
             switch (type) {
                 case DATAVAR.BATTERY:
                     typeName = "StatusLowBattery"
-                    value = self._transformPBatteryLevel(data['statusbattery'])
+                    value = Characteristic.StatusLowBattery.BATTERY_LEVEL_NORMAL
+                    //value = self._transformPBatteryLevel(data['statusbattery'])
                     //service.setCharacteristic(Characteristic.StatusFault, 0);
                     break;
                 case DATAVAR.TEMPERATURE:
