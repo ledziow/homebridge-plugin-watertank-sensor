@@ -105,7 +105,11 @@ WaterTankSensor.prototype = {
 
 
                         self.cache = data;
-                        self.log.info("Cached data: %s.", data.toString());
+                        self.log.info("Cached data:");
+                        for (var item in self.cache) {
+                            self.log.info('key:' + item + ' value:' + self.cache[item]);
+                        }
+
                         self.lastupdate = new Date().getTime() / 1000;
                         callback(null, data, 'Fetch');
 
@@ -121,6 +125,10 @@ WaterTankSensor.prototype = {
             } else {
                 self.log.info("Pulling data from cache.");
                 console.log("Pulling data from cache.");
+                self.log.info("Cached data:");
+                for (var item in self.cache) {
+                    self.log.info('key:' + item + ' value:' + self.cache[item]);
+                }
                 callback(null, self.cache, 'Cache');
             }
         }
@@ -149,6 +157,8 @@ WaterTankSensor.prototype = {
                 self.log(error.message);
                 return next(error, null);
             }
+
+            self.log.info('Returned data: %s', Object.keys(data));
 
             service.setCharacteristic(Characteristic.StatusFault, 0);
 
