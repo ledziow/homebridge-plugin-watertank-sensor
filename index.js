@@ -71,70 +71,66 @@ WaterTankSensor.prototype = {
         if (self._shouldUpdate()) {
             self.isFetching = true
 
-            // Make request only every ten minutes
-            if (this.lastupdate === 0 || this.lastupdate + 600 < (new Date().getTime() / 1000) || this.cache === undefined) {
+            self.log.info('Requesting APIURL: %s',this.api_url)
+            request({
+                url: this.api_url,
+                json: true,
+                headers: {
+                    'User-Agent': 'Homebridge Plugin',
+                }
+            },function (err, response, data) {
 
-                self.log.info('Requesting APIURL: %s',this.api_url)
-                request({
-                    url: this.api_url,
-                    json: true,
-                    headers: {
-                        'User-Agent': 'Homebridge Plugin',
-                    }
-                },function (err, response, data) {
+                self.isFetching = false
 
-                    self.isFetching = false
+                let callbackQueue = self.callbackQueue
+                self.callbackQueue = []
 
-                    let callbackQueue = self.callbackQueue
-                    self.callbackQueue = []
+                // If no errors
+                if (!err && response.statusCode === 200) {
 
-                    // If no errors
-                    if (!err && response.statusCode === 200) {
+                    data.locations.forEach(function(location) {
+                        var device_id = location.id;
+            
+                        if (device_id === self.device_id) {
+                            self.log.info("Found device: %s.", device_id.toString());
 
-                        data.locations.forEach(function(location) {
-                            var device_id = location.id;
-                
-                            if (device_id === self.device_id) {
-                                self.log.info("Found device: %s.", device_id.toString());
-
-                                var temp_data = {
-                                    'temperature': location.measurement.temperature,
-                                    'waterlevel': location.measurement.percent,
-                                    'statusbattery': location.measurement.volts
-                                };
-                                
-                                self.active = location.active
-                                data = temp_data
-                            }
-                        })
-
-
-                        self.cache = data;
-                        self.log.info("Fetched data:");
-                        for (var item in self.cache) {
-                            self.log.info('key:' + item + ' value:' + self.cache[item]);
+                            var temp_data = {
+                                'temperature': location.measurement.temperature,
+                                'waterlevel': location.measurement.percent,
+                                'statusbattery': location.measurement.volts
+                            };
+                            
+                            self.active = location.active
+                            data = temp_data
                         }
+                    })
 
-                        self.lastupdate = new Date().getTime() / 1000;
-                        callback(null, data, 'Fetch');
 
-                        for (let c of callbackQueue) {
-                            c(null, data, 'Cache');
-                        }
-
-                        // If error
-                    } else {
-                        self.log.error("Can't connect to Mojdomek.eu API.");
-                        callback(err, null, null);
-
-                        for (let c of callbackQueue) {
-                            c(err, null, null);
-                        }
+                    self.cache = data;
+                    self.log.info("Fetched data:");
+                    for (var item in self.cache) {
+                        self.log.info('key:' + item + ' value:' + self.cache[item]);
                     }
 
-                });
+                    self.lastupdate = new Date().getTime() / 1000;
+                    callback(null, data, 'Fetch');
+
+                    for (let c of callbackQueue) {
+                        c(null, data, 'Cache');
+                    }
+
+                    // If error
+                } else {
+                    self.log.error("Can't connect to Mojdomek.eu API.");
+                    callback(err, null, null);
+
+                    for (let c of callbackQueue) {
+                        c(err, null, null);
+                    }
+                }
+
+            });
                 
-            } 
         }
         else {
             // Return cached data
