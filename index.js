@@ -124,7 +124,6 @@ WaterTankSensor.prototype = {
                 // Return cached data
             } else {
                 self.log.info("Pulling data from cache.");
-                console.log("Pulling data from cache.");
                 self.log.info("Cached data:");
                 for (var item in self.cache) {
                     self.log.info('key:' + item + ' value:' + self.cache[item]);
@@ -201,6 +200,8 @@ WaterTankSensor.prototype = {
     getTemperature: function(next) {
         var self = this
 
+        self.log.info("next: %s",next);
+
         self._getData(
             temperatureSensorService,
             DATAVAR.TEMPERATURE,
@@ -267,7 +268,7 @@ WaterTankSensor.prototype = {
         let batterystatusSensorService = new Service.Battery("StatusLowBattery")
         batterystatusSensorService
             .getCharacteristic(Characteristic.StatusLowBattery)
-            .on('get', this.getLowBattery.bind(this));
+            .on('get', Characteristic.StatusLowBattery.BATTERY_LEVEL_NORMAL);
         
         services.push(batterystatusSensorService);
 
