@@ -62,8 +62,7 @@ WaterTankSensor.prototype = {
         var self = this;
 
         if (self.isFetching) {
-            self.callbackQueue.push(callback)
-            return
+            callback('Fetching data ... ', null, null);
         }
 
         if (self._shouldUpdate()) {
