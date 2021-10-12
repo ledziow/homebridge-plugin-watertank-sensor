@@ -255,7 +255,7 @@ WaterTankSensor.prototype = {
 
 
         //Temeprature
-        let temperatureSensorService = new Service.TemperatureSensor("Temperature")
+        temperatureSensorService = new Service.TemperatureSensor("Temperature")
         temperatureSensorService
             .getCharacteristic(Characteristic.CurrentTemperature)
             .setProps({
@@ -268,7 +268,7 @@ WaterTankSensor.prototype = {
 
 
         //Battery status
-        let batterystatusSensorService = new Service.Battery("StatusLowBattery")
+        batterystatusSensorService = new Service.Battery("StatusLowBattery")
         batterystatusSensorService
             .getCharacteristic(Characteristic.StatusLowBattery)
             .on('get', this.getLowBattery.bind(this));
