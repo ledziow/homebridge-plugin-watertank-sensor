@@ -120,16 +120,17 @@ WaterTankSensor.prototype = {
                     }
 
                 });
-
-                // Return cached data
-            } else {
-                self.log.info("Pulling data from cache.");
-                self.log.info("Cached data:");
-                for (var item in self.cache) {
-                    self.log.info('key:' + item + ' value:' + self.cache[item]);
-                }
-                callback(null, self.cache, 'Cache');
+                
+            } 
+        }
+        else {
+            // Return cached data
+            self.log.info("Pulling data from cache.");
+            self.log.info("Cached data:");
+            for (var item in self.cache) {
+                self.log.info('key:' + item + ' value:' + self.cache[item]);
             }
+            callback(null, self.cache, 'Cache');
         }
     },
 
