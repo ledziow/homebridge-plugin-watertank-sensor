@@ -150,8 +150,6 @@ WaterTankSensor.prototype = {
     _getData: function(service, type, next) {
         var self = this
 
-        self.log.info("Checking service %s", service);
-
         self.getWaterTankData(function (error, data, source) {
             if (error) {
                 service.setCharacteristic(Characteristic.StatusFault, 1);
