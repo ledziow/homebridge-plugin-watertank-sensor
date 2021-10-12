@@ -268,7 +268,7 @@ WaterTankSensor.prototype = {
         let batterystatusSensorService = new Service.Battery("StatusLowBattery")
         batterystatusSensorService
             .getCharacteristic(Characteristic.StatusLowBattery)
-            .on('get', Characteristic.StatusLowBattery.BATTERY_LEVEL_NORMAL);
+            .on('get', this.getLowBattery.bind(this));
         
         services.push(batterystatusSensorService);
 
