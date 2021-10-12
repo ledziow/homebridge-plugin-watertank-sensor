@@ -105,7 +105,7 @@ WaterTankSensor.prototype = {
 
 
                         self.cache = data;
-                        self.log.info("Cached data:");
+                        self.log.info("Fetched data:");
                         for (var item in self.cache) {
                             self.log.info('key:' + item + ' value:' + self.cache[item]);
                         }
@@ -155,11 +155,6 @@ WaterTankSensor.prototype = {
                 service.setCharacteristic(Characteristic.StatusFault, 1);
                 self.log.info(error.message);
                 return next(error, null);
-            }
-
-            self.log.info('Returned data:');
-            for (var item in data) {
-                self.log.info('key:' + item + ' value:' + data[item]);
             }
 
             let typeName = null
