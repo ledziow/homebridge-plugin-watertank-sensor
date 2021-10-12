@@ -150,6 +150,8 @@ WaterTankSensor.prototype = {
     _getData: function(service, type, next) {
         var self = this
 
+        self.log.info("Service %s", service);
+
         self.getWaterTankData(function (error, data, source) {
             if (error) {
                 service.setCharacteristic(Characteristic.StatusFault, 1);
@@ -166,8 +168,7 @@ WaterTankSensor.prototype = {
             switch (type) {
                 case DATAVAR.BATTERY:
                     typeName = "StatusLowBattery"
-                    value = 1
-                    //value = self._transformPBatteryLevel(data['statusbattery'])
+                    value = self._transformPBatteryLevel(data['statusbattery'])
                     service.setCharacteristic(Characteristic.StatusFault, 0);
                     break;
                 case DATAVAR.TEMPERATURE:
@@ -177,7 +178,7 @@ WaterTankSensor.prototype = {
                     break;
                 case DATAVAR.WATERLEVEL:
                     typeName = "WaterLevel"
-                    value = data['waterlevel']
+                    value = self._check_waterlevel(data['waterlevel'])
                     service.setCharacteristic(Characteristic.StatusFault, 0);
                     break;
                 default:
@@ -293,6 +294,20 @@ WaterTankSensor.prototype = {
             }
             else {
                 return Characteristic.StatusLowBattery.BATTERY_LEVEL_LOW;
+            }
+        }
+    },
+
+    _check_waterlevel: function (waterlevel) {
+        if (isNaN(waterlevel) || waterlevel === null || waterlevel === "" || waterlevel === undefined ) {
+            return (0); // Error or unknown response
+        } else {
+            waterlevel_percentage = parseFloat(waterlevel)
+            if (waterlevel_percentage < 0) {
+                return 0;
+            }
+            else {
+                return waterlevel_percentage;
             }
         }
     }
