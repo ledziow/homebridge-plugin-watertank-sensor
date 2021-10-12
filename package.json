@@ -2,10 +2,12 @@
   "private": true,
   "displayName": "Mojdomek - WaterTank Sensor",
   "name": "homebridge-plugin-watertank-sensor",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Homebridge-plugin for Mojdomek.eu devices.",
   "license": "Apache-2.0",
   "main": "index.js",
+  "author": "WL",
+  "homepage": "https://github.com/ledziow/homebridge-plugin-watertank_monitor",
   "repository": {
     "type": "git",
     "url": "https://github.com/ledziow/homebridge-plugin-watertank_monitor.git"
