@@ -150,7 +150,7 @@ WaterTankSensor.prototype = {
     _getData: function(service, type, next) {
         var self = this
 
-        self.log.info("Service %s", service);
+        //self.log.info("Service %s", service);
 
         self.getWaterTankData(function (error, data, source) {
             if (error) {
@@ -280,6 +280,7 @@ WaterTankSensor.prototype = {
             .on('get', this.getWaterLevel.bind(this));
 
         waterlevelSensorService.isPrimaryService = true;
+        waterlevelSensorService.name = "WaterLevel";
 
         services.push(waterlevelSensorService);
 
