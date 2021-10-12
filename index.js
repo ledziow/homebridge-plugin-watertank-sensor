@@ -164,6 +164,8 @@ WaterTankSensor.prototype = {
             let typeName = null
             let value = null
 
+            self.log.info("Updating %s from %s.", type, source);
+
 
             switch (type) {
                 case DATAVAR.BATTERY:
