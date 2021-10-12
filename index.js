@@ -279,6 +279,8 @@ WaterTankSensor.prototype = {
             .getCharacteristic(Characteristic.CurrentRelativeHumidity)
             .on('get', this.getWaterLevel.bind(this));
 
+        waterlevelSensorService.isPrimaryService = true;
+
         services.push(waterlevelSensorService);
 
         return services;
@@ -288,7 +290,7 @@ WaterTankSensor.prototype = {
         if (isNaN(statusbattery) || statusbattery === null || statusbattery === "" || statusbattery === undefined ) {
             return (0); // Error or unknown response
         } else {
-            battery_voltage = parseFloat(statusbattery)
+            var battery_voltage = parseFloat(statusbattery)
             if (battery_voltage <= 6.5 && battery_voltage >= 6) {
                 return Characteristic.StatusLowBattery.BATTERY_LEVEL_NORMAL;
             }
@@ -302,7 +304,7 @@ WaterTankSensor.prototype = {
         if (isNaN(waterlevel) || waterlevel === null || waterlevel === "" || waterlevel === undefined ) {
             return (0); // Error or unknown response
         } else {
-            waterlevel_percentage = parseFloat(waterlevel)
+            var waterlevel_percentage = parseFloat(waterlevel)
             if (waterlevel_percentage < 0) {
                 return 0;
             }
