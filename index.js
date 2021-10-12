@@ -38,6 +38,7 @@ function WaterTankSensor(log, config) {
     this.active = false;
     this.cache = undefined;
     this.isFetching = false
+    this.callbackQueue = []
     this.api_url = "https://mojdomek.eu/api/api.php?id=" + this.user_id;
 
     this.cacheExpiryTime = Number(config['cacheExpiryTime'])
@@ -63,6 +64,7 @@ WaterTankSensor.prototype = {
 
         if (self.isFetching) {
             self.log.info('Featching data ...')
+            self.callbackQueue.push(callback)
             return
         }
 
@@ -82,6 +84,9 @@ WaterTankSensor.prototype = {
                 },function (err, response, data) {
 
                     self.isFetching = false
+
+                    let callbackQueue = self.callbackQueue
+                    self.callbackQueue = []
 
                     // If no errors
                     if (!err && response.statusCode === 200) {
@@ -113,10 +118,18 @@ WaterTankSensor.prototype = {
                         self.lastupdate = new Date().getTime() / 1000;
                         callback(null, data, 'Fetch');
 
+                        for (let c of callbackQueue) {
+                            c(null, data, 'Cache');
+                        }
+
                         // If error
                     } else {
                         self.log.error("Can't connect to Mojdomek.eu API.");
                         callback(err, null, null);
+
+                        for (let c of callbackQueue) {
+                            c(err, null, null);
+                        }
                     }
 
                 });
