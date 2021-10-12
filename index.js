@@ -257,6 +257,7 @@ WaterTankSensor.prototype = {
         services.push(informationService);
 
 
+
         //Temeprature
         temperatureSensorService = new Service.TemperatureSensor("Temperature")
         temperatureSensorService
@@ -266,6 +267,8 @@ WaterTankSensor.prototype = {
                 maxValue: 100
             })
             .on('get', this.getTemperature.bind(this));
+        temperatureSensorService
+            .getCharacteristic(Characteristic.StatusActive).on('get', this.active);
         
         services.push(temperatureSensorService);
 
@@ -290,6 +293,8 @@ WaterTankSensor.prototype = {
 
         waterlevelSensorService.isPrimaryService = true;
         waterlevelSensorService.name = "WaterLevel";
+        waterlevelSensorService
+            .getCharacteristic(Characteristic.StatusActive).on('get', this.active);
 
         services.push(waterlevelSensorService);
 

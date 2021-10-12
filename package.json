@@ -1,5 +1,4 @@
 {
-  "private": true,
   "displayName": "Mojdomek - WaterTank Sensor",
   "name": "homebridge-plugin-watertank-sensor",
   "version": "0.0.2",
