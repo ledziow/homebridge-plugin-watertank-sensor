@@ -180,13 +180,11 @@ WaterTankSensor.prototype = {
                 case DATAVAR.TEMPERATURE:
                     typeName = "Temperature"
                     value = data['temperature']
-                    self.log.info("Setting %s = %s.", DATAVAR.TEMPERATURE, value);
                     service.setCharacteristic(Characteristic.StatusFault, 0);
                     break;
                 case DATAVAR.WATERLEVEL:
                     typeName = "WaterLevel"
-                    //value = data['waterlevel']
-                    value = 20
+                    value = data['waterlevel']
                     service.setCharacteristic(Characteristic.StatusFault, 0);
                     break;
                 default:
