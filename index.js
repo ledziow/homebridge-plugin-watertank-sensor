@@ -17,7 +17,8 @@ module.exports = function (homebridge) {
 const DATAVAR = {
     WATERLEVEL: 'watertankType',
     TEMPERATURE: 'temperatureType',
-    BATTERY: 'batteryType'
+    BATTERY: 'batteryType',
+    BATTERYLEVEL: 'batterylevel'
 };
 
 function WaterTankSensor(log, config) {
@@ -151,7 +152,7 @@ WaterTankSensor.prototype = {
         this.log.info("Checking cacheExpiryTime.");
         let intervalBetweenUpdates = this.cacheExpiryTime * 60
         return this.lastupdate === 0 ||
-                this.lastupdate + intervalBetweenUpdates < (new Date().getTime() / 1000) ||
+                (new Date().getTime() / 1000) - this.lastupdate >= intervalBetweenUpdates||
                 this.cache === undefined
     },
 
@@ -178,6 +179,11 @@ WaterTankSensor.prototype = {
                 case DATAVAR.BATTERY:
                     typeName = "StatusLowBattery"
                     value = self._transformPBatteryLevel(data['statusbattery'])
+                    service.setCharacteristic(Characteristic.StatusFault, 0);
+                    break;
+                case DATAVAR.BATTERYLEVEL:
+                    typeName = "StatusLowBattery"
+                    value = self._calculate_battery_percentage(data['statusbattery'])
                     service.setCharacteristic(Characteristic.StatusFault, 0);
                     break;
                 case DATAVAR.TEMPERATURE:
@@ -221,6 +227,16 @@ WaterTankSensor.prototype = {
         self._getData(
             batterystatusSensorService,
             DATAVAR.BATTERY,
+            next
+        )
+    },
+
+    getBatteryLevel: function(next) {
+        var self = this
+
+        self._getData(
+            batterystatusSensorService,
+            DATAVAR.BATTERYLEVEL,
             next
         )
     },
@@ -283,6 +299,10 @@ WaterTankSensor.prototype = {
         batterystatusSensorService
             .getCharacteristic(Characteristic.StatusLowBattery)
             .on('get', this.getLowBattery.bind(this));
+
+        batterystatusSensorService
+            .getCharacteristic(Characteristic.BatteryLevel)
+            .on('get', this.getBatteryLevel.bind(this));
         
         services.push(batterystatusSensorService);
 
@@ -311,11 +331,11 @@ WaterTankSensor.prototype = {
             return (0); // Error or unknown response
         } else {
             var battery_voltage = parseFloat(statusbattery)
-            if (battery_voltage <= 6.5 && battery_voltage >= 6) {
-                return Characteristic.StatusLowBattery.BATTERY_LEVEL_NORMAL;
+            if (battery_voltage > 5.83) {
+                return Characteristic.StatusLowBattery.BATTERY_LEVEL_LOW;
             }
             else {
-                return Characteristic.StatusLowBattery.BATTERY_LEVEL_LOW;
+                return Characteristic.StatusLowBattery.BATTERY_LEVEL_NORMAL;
             }
         }
     },
@@ -331,6 +351,34 @@ WaterTankSensor.prototype = {
             else {
                 return waterlevel_percentage;
             }
+        }
+    },
+
+    _calculate_battery_percentage: function (battery_voltage) {
+        if (isNaN(battery_voltage) || battery_voltage === null || battery_voltage === "" || battery_voltage === undefined ) {
+            return (0); // Error or unknown response
+        } else if (parseFloat(battery_voltage) <= 5.75) {
+            return (10); 
+        } else if (parseFloat(battery_voltage) > 5.75 && parseFloat(battery_voltage) <= 5.83) {
+            return (20); 
+        } else if (parseFloat(battery_voltage) > 5.83 && parseFloat(battery_voltage) <= 5.91) {
+            return (30); 
+        } else if (parseFloat(battery_voltage) > 5.91 && parseFloat(battery_voltage) <= 5.98) {
+            return (40); 
+        } else if (parseFloat(battery_voltage) > 5.98 && parseFloat(battery_voltage) <= 6.05) {
+            return (50); 
+        } else if (parseFloat(battery_voltage) > 6.05 && parseFloat(battery_voltage) <= 6.12) {
+            return (60); 
+        } else if (parseFloat(battery_voltage) > 6.12 && parseFloat(battery_voltage) <= 6.19) {
+            return (70); 
+        } else if (parseFloat(battery_voltage) > 6.19 && parseFloat(battery_voltage) <= 6.25) {
+            return (80); 
+        } else if (parseFloat(battery_voltage) > 6.25 && parseFloat(battery_voltage) <= 6.31) {
+            return (90); 
+        } else if (parseFloat(battery_voltage) > 6.31) {
+            return (100); 
+        } else {
+            return 0;
         }
     }
 
