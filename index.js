@@ -270,9 +270,9 @@ WaterTankSensor.prototype = {
          */
         var informationService = new Service.AccessoryInformation();
         informationService
-            .setCharacteristic(Characteristic.Manufacturer, "Mojdomek.eu")
-            .setCharacteristic(Characteristic.Model, "WaterTankSensor")
-            .setCharacteristic(Characteristic.SerialNumber, "123-456");
+            .setCharacteristic(Characteristic.Manufacturer, "WL for Mojdomek.eu")
+            .setCharacteristic(Characteristic.Model, "WaterTankSensor - Homebridge")
+            .setCharacteristic(Characteristic.SerialNumber, this.device_id);
         services.push(informationService);
 
 
