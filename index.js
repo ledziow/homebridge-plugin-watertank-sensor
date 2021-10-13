@@ -329,7 +329,7 @@ WaterTankSensor.prototype = {
             return (0); // Error or unknown response
         } else {
             var battery_voltage = parseFloat(statusbattery)
-            if (battery_voltage > 5.83) {
+            if (battery_voltage < 5.83) {
                 return Characteristic.StatusLowBattery.BATTERY_LEVEL_LOW;
             }
             else {
