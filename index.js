@@ -181,7 +181,7 @@ WaterTankSensor.prototype = {
                     value = self._transformPBatteryLevel(data['statusbattery'])
                     break;
                 case DATAVAR.BATTERYLEVEL:
-                    typeName = "StatusLowBattery"
+                    typeName = "BatteryLevel"
                     value = self._calculate_battery_percentage(data['statusbattery'])
                     break;
                 case DATAVAR.TEMPERATURE:
@@ -293,7 +293,7 @@ WaterTankSensor.prototype = {
 
 
         //Battery status
-        batterystatusSensorService = new Service.Battery("StatusLowBattery")
+        batterystatusSensorService = new Service.Battery("Battery")
         batterystatusSensorService
             .getCharacteristic(Characteristic.StatusLowBattery)
             .on('get', this.getLowBattery.bind(this));
