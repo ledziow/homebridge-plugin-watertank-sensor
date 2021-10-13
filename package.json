@@ -1,7 +1,7 @@
 {
   "displayName": "Mojdomek - WaterTank Sensor",
   "name": "homebridge-plugin-watertank-sensor",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Homebridge-plugin for Mojdomek.eu devices.",
   "license": "Apache-2.0",
   "main": "index.js",
