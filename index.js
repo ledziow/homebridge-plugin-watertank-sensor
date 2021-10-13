@@ -235,10 +235,9 @@ WaterTankSensor.prototype = {
         )
     },
 
-    getActiveState: function(next) {
-        var self = this
-
-        return(next,self.active)
+    getActiveState: function(callback) {
+        this.log('Active status: %s', this.active);
+        callback(null, this.active);
     },
 
     identify: function (callback) {
