@@ -235,6 +235,12 @@ WaterTankSensor.prototype = {
         )
     },
 
+    getActiveState: function(next) {
+        var self = this
+
+        return(next,self.active)
+    },
+
     identify: function (callback) {
         this.log("Identify requested!");
         callback(); // success
@@ -268,7 +274,7 @@ WaterTankSensor.prototype = {
             })
             .on('get', this.getTemperature.bind(this));
         temperatureSensorService
-            .getCharacteristic(Characteristic.StatusActive).on('get', this.active);
+            .getCharacteristic(Characteristic.StatusActive).on('get', this.getActiveState.bind(this));
         
         services.push(temperatureSensorService);
 
@@ -294,7 +300,7 @@ WaterTankSensor.prototype = {
         waterlevelSensorService.isPrimaryService = true;
         waterlevelSensorService.name = "WaterLevel";
         waterlevelSensorService
-            .getCharacteristic(Characteristic.StatusActive).on('get', this.active);
+            .getCharacteristic(Characteristic.StatusActive).on('get', this.getActiveState.bind(this));
 
         services.push(waterlevelSensorService);
 
