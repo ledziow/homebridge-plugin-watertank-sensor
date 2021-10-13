@@ -179,12 +179,10 @@ WaterTankSensor.prototype = {
                 case DATAVAR.BATTERY:
                     typeName = "StatusLowBattery"
                     value = self._transformPBatteryLevel(data['statusbattery'])
-                    service.setCharacteristic(Characteristic.StatusFault, 0);
                     break;
                 case DATAVAR.BATTERYLEVEL:
                     typeName = "StatusLowBattery"
                     value = self._calculate_battery_percentage(data['statusbattery'])
-                    service.setCharacteristic(Characteristic.StatusFault, 0);
                     break;
                 case DATAVAR.TEMPERATURE:
                     typeName = "Temperature"
