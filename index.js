@@ -363,7 +363,7 @@ WaterTankSensor.prototype = {
         if (isNaN(battery_voltage) || battery_voltage === null || battery_voltage === "" || battery_voltage === undefined ) {
             return (0); // Error or unknown response
         } else {
-            return (parseFloat(battery_voltage);
+            return (parseFloat(battery_voltage));
         }
     }
 
