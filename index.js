@@ -98,15 +98,10 @@ WaterTankSensor.prototype = {
 
                             self.software = location.software;
 
-                            self.log.info("Found measurement:");
-                            for (var item in location) {
-                                self.log.info('key:' + item + ' value:' + location.measurement[item]);
-                            }
-
                             var temp_data = {
                                 'temperature': location.measurement.temperature,
                                 'waterlevel': location.measurement.percent,
-                                'statusbattery': location.batt_level,
+                                'statusbattery': location.measurement.volts,
                                 'last_con': location.measurement.datatime
                             };
                             data = temp_data;
@@ -344,7 +339,7 @@ WaterTankSensor.prototype = {
             return (0); // Error or unknown response
         } else {
             var battery_voltage = parseFloat(statusbattery)
-            if (battery_voltage < 15) {
+            if (battery_voltage < 5.5) {
                 return Characteristic.StatusLowBattery.BATTERY_LEVEL_LOW;
             }
             else {
@@ -370,8 +365,28 @@ WaterTankSensor.prototype = {
     _calculate_battery_percentage: function (battery_voltage) {
         if (isNaN(battery_voltage) || battery_voltage === null || battery_voltage === "" || battery_voltage === undefined ) {
             return (0); // Error or unknown response
+        } else if (parseFloat(battery_voltage) <= 5.75) {
+            return (10); 
+        } else if (parseFloat(battery_voltage) > 5.75 && parseFloat(battery_voltage) <= 5.83) {
+            return (20); 
+        } else if (parseFloat(battery_voltage) > 5.83 && parseFloat(battery_voltage) <= 5.91) {
+            return (30); 
+        } else if (parseFloat(battery_voltage) > 5.91 && parseFloat(battery_voltage) <= 5.98) {
+            return (40); 
+        } else if (parseFloat(battery_voltage) > 5.98 && parseFloat(battery_voltage) <= 6.05) {
+            return (50); 
+        } else if (parseFloat(battery_voltage) > 6.05 && parseFloat(battery_voltage) <= 6.12) {
+            return (60); 
+        } else if (parseFloat(battery_voltage) > 6.12 && parseFloat(battery_voltage) <= 6.19) {
+            return (70); 
+        } else if (parseFloat(battery_voltage) > 6.19 && parseFloat(battery_voltage) <= 6.25) {
+            return (80); 
+        } else if (parseFloat(battery_voltage) > 6.25 && parseFloat(battery_voltage) <= 6.31) {
+            return (90); 
+        } else if (parseFloat(battery_voltage) > 6.31) {
+            return (100); 
         } else {
-            return (parseFloat(battery_voltage));
+            return 0;
         }
     }
 
