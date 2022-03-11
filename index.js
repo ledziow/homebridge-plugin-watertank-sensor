@@ -98,14 +98,13 @@ WaterTankSensor.prototype = {
                             var temp_data = {
                                 'temperature': location.measurement.temperature,
                                 'waterlevel': location.measurement.percent,
-                                'statusbattery': location.measurement.volts
+                                'statusbattery': location.measurement.batt_level,
+                                'last_con': location.measurement.datatime
                             };
-                            
                             self.active = location.active
                             data = temp_data
                         }
                     })
-
 
                     self.cache = data;
                     self.log.info("Fetched data:");
@@ -114,6 +113,14 @@ WaterTankSensor.prototype = {
                     }
 
                     self.lastupdate = new Date().getTime() / 1000;
+
+                    if (((self.lastupdate / 60) - (new Date(self.cache['last_con']).getTime() / 1000 * 60)) >= 120) {
+                        self.active = false
+                    } else {
+                        self.active = true
+                    }
+                    self.log.info('Last data recieved ' + ((self.lastupdate / 60) - (new Date(self.cache['last_con']).getTime() / 1000 * 60)) + ' min. ago.');
+
                     callback(null, data, 'Fetch');
 
                     for (let c of callbackQueue) {
@@ -329,7 +336,7 @@ WaterTankSensor.prototype = {
             return (0); // Error or unknown response
         } else {
             var battery_voltage = parseFloat(statusbattery)
-            if (battery_voltage < 5.83) {
+            if (battery_voltage < 15) {
                 return Characteristic.StatusLowBattery.BATTERY_LEVEL_LOW;
             }
             else {
@@ -355,28 +362,8 @@ WaterTankSensor.prototype = {
     _calculate_battery_percentage: function (battery_voltage) {
         if (isNaN(battery_voltage) || battery_voltage === null || battery_voltage === "" || battery_voltage === undefined ) {
             return (0); // Error or unknown response
-        } else if (parseFloat(battery_voltage) <= 5.75) {
-            return (10); 
-        } else if (parseFloat(battery_voltage) > 5.75 && parseFloat(battery_voltage) <= 5.83) {
-            return (20); 
-        } else if (parseFloat(battery_voltage) > 5.83 && parseFloat(battery_voltage) <= 5.91) {
-            return (30); 
-        } else if (parseFloat(battery_voltage) > 5.91 && parseFloat(battery_voltage) <= 5.98) {
-            return (40); 
-        } else if (parseFloat(battery_voltage) > 5.98 && parseFloat(battery_voltage) <= 6.05) {
-            return (50); 
-        } else if (parseFloat(battery_voltage) > 6.05 && parseFloat(battery_voltage) <= 6.12) {
-            return (60); 
-        } else if (parseFloat(battery_voltage) > 6.12 && parseFloat(battery_voltage) <= 6.19) {
-            return (70); 
-        } else if (parseFloat(battery_voltage) > 6.19 && parseFloat(battery_voltage) <= 6.25) {
-            return (80); 
-        } else if (parseFloat(battery_voltage) > 6.25 && parseFloat(battery_voltage) <= 6.31) {
-            return (90); 
-        } else if (parseFloat(battery_voltage) > 6.31) {
-            return (100); 
         } else {
-            return 0;
+            return (parseFloat(battery_voltage);
         }
     }
 
