@@ -99,14 +99,14 @@ WaterTankSensor.prototype = {
                             self.software = location.software;
 
                             self.log.info("Found measurement:");
-                            for (var item in location.measurement) {
+                            for (var item in location) {
                                 self.log.info('key:' + item + ' value:' + location.measurement[item]);
                             }
 
                             var temp_data = {
                                 'temperature': location.measurement.temperature,
                                 'waterlevel': location.measurement.percent,
-                                'statusbattery': location.measurement.batt_level,
+                                'statusbattery': location.batt_level,
                                 'last_con': location.measurement.datatime
                             };
                             data = temp_data;
