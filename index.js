@@ -101,7 +101,7 @@ WaterTankSensor.prototype = {
                             var temp_data = {
                                 'temperature': location.measurement.temperature,
                                 'waterlevel': location.measurement.percent,
-                                'statusbattery': location.measurement['batt_level'],
+                                'statusbattery': location.measurement.rssi,
                                 'last_con': location.measurement.datatime
                             };
                             data = temp_data;
