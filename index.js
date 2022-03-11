@@ -36,10 +36,11 @@ function WaterTankSensor(log, config) {
         throw new Error("No 'device_id' config value");
     }
 
-    this.active = false;
+    this.active = 0;
     this.cache = undefined;
-    this.isFetching = false
-    this.callbackQueue = []
+    this.isFetching = false;
+    this.callbackQueue = [];
+    this.software = undefined;
     this.api_url = "https://mojdomek.eu/api/api.php?id=" + this.user_id;
 
     this.cacheExpiryTime = Number(config['cacheExpiryTime'])
@@ -95,14 +96,15 @@ WaterTankSensor.prototype = {
                         if (device_id === self.device_id) {
                             self.log.info("Found device: %s.", device_id.toString());
 
+                            self.software = location.software;
+
                             var temp_data = {
                                 'temperature': location.measurement.temperature,
                                 'waterlevel': location.measurement.percent,
-                                'statusbattery': location.measurement.batt_level,
+                                'statusbattery': location.measurement['batt_level'],
                                 'last_con': location.measurement.datatime
                             };
-                            self.active = location.active
-                            data = temp_data
+                            data = temp_data;
                         }
                     })
 
@@ -115,9 +117,9 @@ WaterTankSensor.prototype = {
                     self.lastupdate = new Date().getTime() / 1000;
 
                     if (((self.lastupdate / 60) - (new Date(self.cache['last_con']).getTime() / 1000 * 60)) >= 120) {
-                        self.active = false
+                        self.active = 0
                     } else {
-                        self.active = true
+                        self.active = 1
                     }
                     self.log.info('Last data recieved ' + ((self.lastupdate / 60) - (new Date(self.cache['last_con']).getTime() / 1000 * 60)) + ' min. ago.');
 
@@ -279,6 +281,7 @@ WaterTankSensor.prototype = {
         informationService
             .setCharacteristic(Characteristic.Manufacturer, "WL for Mojdomek.eu")
             .setCharacteristic(Characteristic.Model, "WaterTankSensor - Homebridge")
+            .setCharacteristic(Characteristic.SoftwareRevision, this.software)
             .setCharacteristic(Characteristic.SerialNumber, this.device_id);
         services.push(informationService);
 
